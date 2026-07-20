@@ -1,0 +1,107 @@
+/* ==========================================================================
+   search-panel.css
+   Step 6: 상단 검색조건 패널(CollapsibleSearchPanel) — 접기/펴기 공통 컴포넌트.
+   화면 유형(A/B/C) 전부 최상단에 이 컴포넌트를 재사용한다 (Step 8에서 SplitLayout과 연결).
+
+   CSS Grid의 grid-template-rows: 1fr <-> 0fr 트릭 사용.
+   트리메뉴(sidebar.css)에서 검증된 것과 동일한 방식 — JS가 높이를 계산할 필요 없이
+   브라우저가 매 프레임마다 실제 콘텐츠 크기를 다시 계산해준다.
+   ========================================================================== */
+
+.search-panel {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    background: #fff;
+    margin-bottom: 8px;
+    flex: 0 0 auto; /* .tab-pane.active(flex column) 안에서 항상 콘텐츠 높이만큼만 차지, 축소되지 않음 */
+}
+
+.search-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: #eef2f7;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 4px 4px 0 0;
+}
+
+.search-panel-title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #2c3e50;
+}
+
+.search-panel-toggle {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #35618c;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-panel-toggle:hover {
+    color: #1f3a5f;
+}
+
+/* 접힘/펼침 시 아이콘 회전 (▼ <-> ▲ 느낌) */
+.search-panel-toggle i {
+    transition: transform 0.25s ease;
+}
+
+.search-panel.collapsed .search-panel-toggle i {
+    transform: rotate(180deg);
+}
+
+/* ── 핵심: grid-template-rows fr 트릭 ── */
+.search-panel-body {
+    display: grid;
+    grid-template-rows: 1fr; /* 기본 펼침 상태 */
+    transition: grid-template-rows 0.25s ease;
+}
+
+.search-panel.collapsed .search-panel-body {
+    grid-template-rows: 0fr;
+}
+
+.search-panel-body-inner {
+    overflow: hidden;
+    min-height: 0; /* grid item 기본값(min-height: auto) 때문에 overflow가 안 먹히는 것 방지 */
+    /* ⚠ 이 요소(접히는 grid item 자체)에는 절대 padding을 주지 않을 것.
+       padding은 grid-template-rows: 0fr로도 압축되지 않는 고정값이라,
+       여기 직접 넣으면 접혀도 padding만큼 슬리버가 남는 버그가 생김.
+       패딩/내부 레이아웃은 반드시 아래 .search-panel-fields에만 준다. */
+}
+
+.search-panel-fields {
+    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+}
+
+.search-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #333;
+}
+
+.search-field label {
+    white-space: nowrap;
+    color: #555;
+}
+
+.search-field input,
+.search-field select {
+    font-size: 12px;
+    padding: 3px 6px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}

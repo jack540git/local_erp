@@ -1,0 +1,83 @@
+/* admin.css
+   3단계: 관리자 설정 화면(사이드바 설정 버튼 -> "설정" 탭) 전용 스타일.
+
+   참고: .kv-form 계열 클래스는 content-renderers.js의 renderKeyValueForm()에서
+   voucher_entry__mgmt_panel / vendor_info__basic 등 여러 화면이 이미 쓰고 있었는데
+   지금까지 정의된 CSS가 없었다. 관리자 화면도 같은 클래스를 쓰므로 여기서 기본 스타일을
+   함께 정의한다 (전역 공통 스타일이라 나중에 별도 kv-form.css로 분리해도 무방).
+*/
+
+/* ── key-value 폼 공통 스타일 ─────────────────────────────────────── */
+.kv-form {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    overflow: auto;
+}
+
+.kv-form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.kv-form-label {
+    flex: 0 0 120px;
+    font-size: 12px;
+    color: #555;
+}
+
+.kv-form-value {
+    flex: 1 1 auto;
+}
+
+.kv-form-value input,
+.kv-form-value select {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 5px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.kv-form-value input[readonly] {
+    background: #f5f6f8;
+    color: #666;
+}
+
+/* ── 관리자 화면 전용 ─────────────────────────────────────────────── */
+.admin-role-select {
+    font-size: 12px;
+    padding: 5px 8px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.admin-btn-row {
+    border-bottom: none;
+    justify-content: flex-end;
+    padding-top: 16px;
+}
+
+.admin-save-btn {
+    background: #2563a8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 7px 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.admin-save-btn:hover {
+    background: #1f4f8a;
+}
+
+.admin-save-btn:disabled {
+    background: #9fb4c9;
+    cursor: not-allowed;
+}

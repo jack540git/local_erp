@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}ERP{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/toolbar.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search-panel.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/split-layout.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Step 9: AG Grid Community (CDN, 레거시 CSS 테마 방식 — ag-grid-theme.css에서 CSS 변수로 엑셀풍 커스텀) -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.0/dist/ag-grid-community.min.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/@ag-grid-community/locale/dist/locale/ko-KR.js"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.0/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.0/styles/ag-theme-alpine.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ag-grid-theme.css') }}?v={{ ASSET_VERSION }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v={{ ASSET_VERSION }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-shell">
+
+        <!-- ① 좌측 사이드바 (Step 2: 트리메뉴, Step 3: 접기/펴기) -->
+        <div class="area-sidebar">
+            {% include 'partials/_sidebar_tree.html' %}
+        </div>
+
+        <!-- ② 상단 마스터바 (Step 5: 조회/추가/삭제/저장/인쇄/닫기 툴바 완료) -->
+        <div class="area-topbar">
+            <div class="dummy-block">
+                <div class="topbar-left">
+                    <button type="button" id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="사이드바 토글">◀</button>
+                </div>
+                <div class="topbar-center">
+                    <div class="master-toolbar" id="master-toolbar">
+                        <button type="button" class="toolbar-btn" data-action="search"><i class="fa-solid fa-magnifying-glass"></i>조회</button>
+                        <button type="button" class="toolbar-btn" data-action="add"><i class="fa-solid fa-plus"></i>추가</button>
+                        <button type="button" class="toolbar-btn" data-action="delete"><i class="fa-solid fa-trash"></i>삭제</button>
+                        <button type="button" class="toolbar-btn" data-action="save"><i class="fa-solid fa-floppy-disk"></i>저장</button>
+                        <button type="button" class="toolbar-btn" data-action="print"><i class="fa-solid fa-print"></i>인쇄</button>
+                        <button type="button" class="toolbar-btn" data-action="close"><i class="fa-solid fa-xmark"></i>닫기</button>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    {% if email %}{{ email }} ({{ role }})&nbsp;&nbsp;{% endif %}
+                    <form action="{{ url_for('auth.logout') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit">로그아웃</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ③ 탭바 / MDI (Step 4: 탭 생성/전환/닫기 구현 완료) -->
+        <div class="area-tabbar">
+            <div class="tab-bar" id="tab-bar"></div>
+        </div>
+
+        <!-- ④ 메인 콘텐츠 영역 (탭별 tab-pane, Step 6: 검색조건 패널 완료, Step 7~8: SplitLayout, Step 9: AG Grid) -->
+        <div class="area-main">
+            <div class="tab-content-area" id="tab-content-area">
+                <div class="tab-pane active" data-tab-id="tab-home">
+                    {% block main_content %}
+                    <div class="dummy-block">
+                        홈 대시보드 (좌측 트리메뉴에서 화면을 선택하면 탭이 열립니다)
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ⑤ 하단 상태바 -->
+        <div class="area-statusbar">
+            <div class="dummy-block">
+                STATUS BAR
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // tab-manager.js의 Lazy Loading(admin.js 동적 로드)에서도 같은 캐시버스팅 값을 쓸 수 있도록 전역으로 노출.
+        window.ASSET_VERSION = "{{ ASSET_VERSION }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/tab-manager.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar-tree.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/toolbar.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/search-fields-config.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/search-panel.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/split-layout.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/screen-layouts.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/api-fetch.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-api.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/profit-analysis-api.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/local-profit-data-api.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/content-renderers/registry.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/content-renderers/accounting.js') }}?v={{ ASSET_VERSION }}"></script>
+    <script src="{{ url_for('static', filename='js/content-renderers/tax-invoice.js') }}?v={{ ASSET_VERSION }}"></script>
+    <!-- content-renderers/admin.js는 여기서 로드하지 않음: admin_settings 탭을 최초로 열 때 tab-manager.js가 동적 로드 (Lazy Loading) -->
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

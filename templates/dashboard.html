@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f5f7; margin: 0; }
+        header { background: #2c3e50; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        header form { margin: 0; }
+        header button { background: transparent; border: 1px solid #fff; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        header button:hover { background: rgba(255,255,255,0.15); }
+        main { padding: 32px; }
+        .info-box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); max-width: 400px; }
+        .info-box p { margin: 8px 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <header>
+        <span>로그인 성공</span>
+        <form action="{{ url_for('logout') }}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </header>
+    <main>
+        <div class="info-box">
+            <p><strong>이메일:</strong> {{ email }}</p>
+            <p><strong>권한:</strong> {{ role }}</p>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* ag-grid-theme.css
+   Step 9: AG Grid Community 커스텀 테마(엑셀풍: 얇은 그리드 라인, 진한 헤더 배경, 홀짝 행 배경 등).
+   ag-theme-alpine 기본 테마 위에 CSS 변수를 오버라이드하는 방식.
+   그리드 컨테이너에 class="ag-theme-alpine ag-theme-erp" 둘 다 붙여야 적용된다
+   (content-renderers.js의 renderAgGrid()가 자동으로 붙임). */
+
+.ag-theme-erp {
+    --ag-header-background-color: #34495e;
+    --ag-header-foreground-color: #fff;
+    --ag-header-height: 32px;
+    --ag-header-column-separator-display: block;
+    --ag-header-column-separator-color: rgba(255, 255, 255, 0.15);
+    --ag-row-height: 28px;
+    --ag-font-size: 9.5px;
+    --ag-font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+    --ag-borders: solid 1px;
+    --ag-border-color: #dfe3e8;
+    --ag-row-border-color: #eceff2;
+    --ag-odd-row-background-color: #f7f9fb;
+    --ag-row-hover-color: #eaf2fb;
+    --ag-selected-row-background-color: #d6e6f7;
+    --ag-cell-horizontal-padding: 8px;
+}
+
+/* 하단 합계 행(pinnedBottomRowData) 강조 — 전표입력 상세그리드 등에서 사용 */
+.ag-theme-erp .ag-floating-bottom {
+    font-weight: bold;
+    background-color: #eef2f7;
+}
+
+/* 헤더의 정렬/필터 아이콘은 --ag-header-foreground-color를 자동 상속받지 않아
+   진한 남색 배경에서 잘 안 보이는 문제가 있어 명시적으로 흰색으로 지정 */
+.ag-theme-erp .ag-header-cell .ag-icon,
+.ag-theme-erp .ag-header-cell-label .ag-icon,
+.ag-theme-erp .ag-header-icon,
+.ag-theme-erp .ag-sort-indicator-icon {
+    color: var(--ag-header-foreground-color);
+}
+
+/* Step 9: key-value 폼 렌더러 (그리드가 아닌 입력항목 나열 화면용
+   — 전표입력 관리항목, 거래처정보관리 서브탭들). content-renderers.js의
+   renderKeyValueForm()이 생성하는 마크업과 짝을 이루는 스타일. */
+.kv-form {
+    height: 100%;
+    overflow: auto;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.kv-form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.kv-form-label {
+    flex: 0 0 130px;
+    font-size: 12px;
+    color: #555;
+}
+
+.kv-form-value {
+    flex: 1 1 auto;
+}
+
+.kv-form-value input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 4px 6px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    background: #f7f8fa;
+    color: #333;
+}

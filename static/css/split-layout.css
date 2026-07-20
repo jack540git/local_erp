@@ -1,0 +1,128 @@
+/* ==========================================================================
+   split-layout.css
+   Step 7: 범용 분할 레이아웃 엔진(SplitLayout) 스타일.
+
+   - .split-container: flex 기반, direction(vertical=상하/horizontal=좌우)에 따라
+     flex-direction만 바뀜. 자식 pane과 그 사이의 .split-bar(드래그 핸들)를 담음.
+   - .split-pane: 개별 스크롤(overflow: auto) 보장. flex-basis는 JS가 px로 직접 관리.
+   - .split-tabs: SplitLayout 노드 중 type:"tabs"용 — 화면 내부의 경량 서브탭.
+   ========================================================================== */
+
+/* 각 화면(tab-pane)에서 검색조건 패널 아래, SplitLayout이 실제로 마운트되는 자리.
+   flex: 1 1 auto로 부모(.tab-pane.active)의 남은 공간을 전부 차지하고,
+   min-height: 0으로 flex item 기본 축소 제한을 풀어줘야 overflow가 정상 동작한다.
+   Step 8부터는 모든 화면(유형 A/B/C)이 이 클래스를 공통으로 사용한다. */
+.screen-content-area {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.split-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.split-container[data-direction="vertical"] {
+    flex-direction: column;
+}
+
+.split-container[data-direction="horizontal"] {
+    flex-direction: row;
+}
+
+.split-pane {
+    overflow: auto;
+    min-height: 0;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* 드래그 핸들(분할선) */
+.split-bar {
+    flex: 0 0 6px;
+    background: #d7dee6;
+    position: relative;
+    z-index: 1;
+}
+
+.split-container[data-direction="vertical"] > .split-bar {
+    cursor: row-resize;
+}
+
+.split-container[data-direction="horizontal"] > .split-bar {
+    cursor: col-resize;
+}
+
+.split-bar:hover,
+.split-bar.dragging {
+    background: #a9c3dd;
+}
+
+/* 더미 콘텐츠 플레이스홀더 (Step 9에서 실제 AG Grid로 교체될 자리) */
+.split-pane-placeholder {
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 12px;
+    color: #666;
+    background: #f7f8fa;
+    border: 1px dashed #c9d2dc;
+}
+
+/* ── type: "tabs" 노드용 경량 서브탭 (Step 8: 거래처정보관리 등 유형 C에서 사용) ── */
+.split-tabs {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.split-tabs-bar {
+    display: flex;
+    flex: 0 0 auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: #f3f5f8;
+}
+
+.split-tab-btn {
+    padding: 6px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: #555;
+    border-bottom: 2px solid transparent;
+}
+
+.split-tab-btn:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.split-tab-btn.active {
+    color: #2563a8;
+    font-weight: bold;
+    border-bottom-color: #2563a8;
+    background: #fff;
+}
+
+.split-tabs-content {
+    flex: 1 1 auto;
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.split-tabs-content > .split-tab-pane {
+    display: none;
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.split-tabs-content > .split-tab-pane.active {
+    display: block;
+}

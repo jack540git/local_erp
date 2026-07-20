@@ -1,0 +1,152 @@
+/* sidebar.css
+   Step 2: 트리메뉴(3단계) 스타일 + 펼침/접힘 애니메이션 + hover/active 스타일.
+   Step 3에서 이 파일에 사이드바 접기/펴기(토글 버튼) 스타일을 추가로 얹을 예정. */
+
+.area-sidebar {
+    background: #ffffff;
+    color: #222;
+    border-right: 1px solid #d8dde3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ── 사이드바 헤더 ("회계관리" + 닫기) ───────────────────────────── */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #eef2f7;
+    border-bottom: 1px solid #d8dde3;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* ── 트리 전체 ──────────────────────────────────────────────────── */
+.sidebar-tree {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.tree-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 하위 트리는 들여쓰기 (재귀 렌더링이라 depth가 깊어질수록 자동으로 계속 들여써짐) */
+.tree-list .tree-list {
+    padding-left: 16px;
+}
+
+.tree-node {
+    margin: 0;
+}
+
+/* ── 각 노드의 행(row) — hover, 커서 ──────────────────────────── */
+.tree-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color 0.15s ease;
+}
+
+.tree-row:hover {
+    background-color: #eef4fb;
+}
+
+.tree-toggle-icon {
+    display: inline-block;
+    width: 12px;
+    font-size: 10px;
+    color: #888;
+    transition: transform 0.2s ease;
+}
+
+/* 폴더가 펼쳐진 상태면 ▶ 아이콘을 90도 회전시켜 ▼ 느낌으로 표현 */
+.tree-folder.expanded > .tree-row .tree-toggle-icon {
+    transform: rotate(90deg);
+}
+
+.tree-icon {
+    font-size: 13px;
+}
+
+.tree-label {
+    font-size: 13px;
+}
+
+/* ── 하위 트리 펼침/접힘 애니메이션 ───────────────────────────────
+   CSS Grid의 grid-template-rows: 0fr <-> 1fr 트릭 사용.
+   JS가 scrollHeight를 미리 계산해서 넣어줄 필요 없이, 브라우저가 매 프레임마다
+   실제 콘텐츠 크기를 다시 계산해주므로, 중첩 구조에서도 상위/하위가 한 번에
+   자연스럽게 함께 늘어난다 (예전 max-height + JS 보정 방식의 "2단계 움직임" 문제 해소). */
+.tree-children {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease;
+}
+
+.tree-children > .tree-list {
+    overflow: hidden;
+    min-height: 0;
+}
+
+.tree-folder.expanded > .tree-children {
+    grid-template-rows: 1fr;
+}
+
+/* ── 리프 노드(파일) 선택 상태 ───────────────────────────────────
+   클릭하여 선택된 리프 노드: 진한 파란 배경 + 흰 글씨, 고정 유지 */
+.tree-leaf.active > .tree-row {
+    background-color: #2563a8;
+}
+
+.tree-leaf.active > .tree-row .tree-label,
+.tree-leaf.active > .tree-row .tree-icon {
+    color: #fff;
+}
+
+.tree-leaf.active > .tree-row:hover {
+    background-color: #2563a8; /* 선택 상태에서는 hover 색으로 덮이지 않도록 고정 */
+}
+
+/* ── 1단계(관리자 설정): 사이드바 하단 고정 설정 버튼 ───────────────────
+   .area-sidebar가 이미 flex-column이라 flex-shrink:0만 주면 맨 아래에 고정된다. */
+.sidebar-footer {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 12px;
+    border-top: 1px solid #d8dde3;
+    background: #eef2f7;
+}
+
+.sidebar-settings-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #555;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-settings-btn:hover {
+    background-color: #dde6f0;
+    color: #2563a8;
+}
+
+.sidebar-settings-btn:active {
+    background-color: #cddaeb;
+}

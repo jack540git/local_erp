@@ -1,0 +1,47 @@
+{# _sidebar_tree.html
+   Step 2: 3단계 계층 트리메뉴 렌더링 (더미 데이터, tree_menu는 app.py에서 주입)
+   재귀 매크로로 폴더/파일 노드를 무한 depth까지 렌더링 가능하게 설계.
+   (지금은 더미로 3단계까지만 사용하지만, 매크로 자체는 depth 제한 없음) #}
+
+{% macro render_tree(nodes) %}
+<ul class="tree-list">
+    {% for node in nodes %}
+        {% if node.type == 'folder' %}
+        <li class="tree-node tree-folder">
+            <div class="tree-row" data-role="folder-toggle">
+                <span class="tree-toggle-icon">▶</span>
+                <span class="tree-icon">📁</span>
+                <span class="tree-label">{{ node.label }}</span>
+            </div>
+            <div class="tree-children">
+                {{ render_tree(node.children) }}
+            </div>
+        </li>
+        {% else %}
+        <li class="tree-node tree-leaf" data-menu-key="{{ node.key }}">
+            <div class="tree-row" data-role="leaf">
+                <span class="tree-icon">📄</span>
+                <span class="tree-label">{{ node.label }}</span>
+            </div>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endmacro %}
+
+<div class="sidebar-header">
+    <span class="sidebar-title">매출입관리</span>
+</div>
+
+<div class="sidebar-tree" id="sidebar-tree">
+    {{ render_tree(tree_menu) }}
+</div>
+
+{# 1단계(관리자 설정): 사이드바 하단 우측 고정 설정 버튼.
+   클릭 시 sidebar-tree.js에서 TabManager.openTab('admin_settings', '설정')을 호출해
+   기존 리프 노드 클릭과 동일한 방식으로 탭을 연다. #}
+<div class="sidebar-footer">
+    <button type="button" id="sidebar-settings-btn" class="sidebar-settings-btn" aria-label="설정" title="설정">
+        <i class="fa-solid fa-gear"></i>
+    </button>
+</div>

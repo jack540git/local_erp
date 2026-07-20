@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# VS Code
+.vscode/
+
+# 로그 파일
+logs/
+*.log
+
+# md 파일
+*.xlsx
+.env
+*.bak
+
+.dockerignore
+docker-compose.yml
+Dockerfile
+.gitignore
+db_legacy_backup.py
+

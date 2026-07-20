@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{# admin_users.html
+   2단계: 백엔드(users 테이블 실연동) 확인용 임시 화면.
+   좌측 목록 + 우측 기본정보/권한정보 탭의 실제 UI(AG Grid, split-layout 등)는
+   3단계에서 SPA 탭(content-renderers.js의 admin_settings__* 렌더 함수)으로 구현했다.
+   이 템플릿은 "설정" 탭이 아닌, /admin/users로 직접 URL 접근했을 때의 폴백 페이지로만 쓰인다. #}
+{% block title %}설정 - 사용자 관리{% endblock %}
+
+{% block main_content %}
+<div class="dummy-block">
+    <h3>사용자 관리 (직접 URL 접근 시 폴백 화면 — 실제 UI는 사이드바 하단 설정 버튼의 "설정" 탭에서 확인)</h3>
+    <table style="border-collapse: collapse; margin-top: 12px;">
+        <thead>
+            <tr>
+                <th style="border:1px solid #ccc; padding:6px 12px;">ID</th>
+                <th style="border:1px solid #ccc; padding:6px 12px;">이메일</th>
+                <th style="border:1px solid #ccc; padding:6px 12px;">Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td style="border:1px solid #ccc; padding:6px 12px;">{{ user.id }}</td>
+                <td style="border:1px solid #ccc; padding:6px 12px;">{{ user.email }}</td>
+                <td style="border:1px solid #ccc; padding:6px 12px;">{{ user.role }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
